@@ -1,10 +1,10 @@
 // Set appId
-const appID='app ID hidden';
+const appID='d7ccd62b17514d9b03b57d5eec0c695b';
 
 //fetch weather info from openweathermap api
-const getWeatherForCity=city=>
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${appID}&units=metric`)
-    .then((response)=>response.json());
+// const getWeatherForCity=city=>
+//     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${inputValue}&appid=${appID}&units=metric`)
+//     .then((response)=>response.json());
 
 //createCardHtml function to render the weather info
 const createCardHtml=(name, emoji, temp, description)=>`
@@ -56,24 +56,39 @@ const goButton=document.querySelector('#go-button');
 const weatherContainer=document.querySelector('#weather-container');
 
 // add event listener on the go button
-goButton.addEventListener('click', ()=>{
+goButton.addEventListener('click', async()=>{
     //get the city from the input field
-    const city=cityInput.value;
+    //const city=cityInput.value;
+    const inputValue=cityInput.value;
 
     //get the weather data for the city
-    getWeatherForCity(city)
-        .then(data=>{
-            const name=data.name;
-            const emoji = emojis[data.weather[0].icon];
-            const temp = data.main.temp;
-            const description = data.weather[0].description;
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${inputValue}&appid=${appID}&units=metric`);
+    const data = await response.json();
+    const name=data.name;
+    const emoji = emojis[data.weather[0].icon];
+    const temp=data.main.temp;
+    const description=data.weather[0].description;
 
-        //create card HTML
-        const cardHtml = createCardHtml(name, emoji, temp, description);
+    //create card HTML
+    const htmlCard=createCardHtml(name, emoji, temp, description);
 
-        //render
-        weatherContainer.innerHTML = cardHtml;
-        });
+    //render
+    weatherContainer.innerHTML=htmlCard;
+ 
+    // //get the weather data for the city
+    // getWeatherForCity(city)
+    //     .then(data=>{
+    //         const name=data.name;
+    //         const emoji = emojis[data.weather[0].icon];
+    //         const temp = data.main.temp;
+    //         const description = data.weather[0].description;
+
+    //     //create card HTML
+    //     const cardHtml = createCardHtml(name, emoji, temp, description);
+
+    //     //render
+    //     weatherContainer.innerHTML = cardHtml;
+    //     });
 })
 
 
